@@ -200,6 +200,21 @@ REST_FRAMEWORK = {
 MAPTILER_API_KEY = os.getenv('MAPTILER_API_KEY', '')
 
 # =============================================================
+# SEGURIDAD PARA IFRAME (SharePoint y otros sitios externos)
+# =============================================================
+# X-Frame-Options: controla si la aplicación puede mostrarse en iframes
+# SAMEORIGIN: permite iframes del mismo dominio (necesario para SharePoint)
+X_FRAME_OPTIONS = os.getenv('X_FRAME_OPTIONS', 'DENY')
+
+# CSRF_TRUSTED_ORIGINS: lista de dominios permitidos para operaciones POST/PUT/DELETE
+# Necesario cuando la app está embebida en SharePoint o intranet corporativa
+csrf_origins = os.getenv('CSRF_TRUSTED_ORIGINS', '')
+if csrf_origins:
+    CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in csrf_origins.split(',')]
+else:
+    CSRF_TRUSTED_ORIGINS = []
+
+# =============================================================
 # OTROS
 # =============================================================
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
